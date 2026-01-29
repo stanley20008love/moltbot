@@ -37,4 +37,7 @@ ENV NODE_ENV=production
 # This reduces the attack surface by preventing container escape via root privileges
 USER node
 
-CMD ["node", "dist/index.js"]
+# Start the Gateway (long-running service that listens on PORT env var, defaults to 18789)
+# --allow-unconfigured: bypass requirement for gateway.mode=local in config
+# Use PORT env var from Render, or fall back to default
+CMD ["sh", "-c", "node dist/index.js gateway --bind 0.0.0.0 --allow-unconfigured --port ${PORT:-18789}"]
